@@ -1,7 +1,6 @@
-
 const App = () => {
   return (
-    <div className=''>Text Tailwind</div>
+    <div className="">App</div>
   )
 }
 
