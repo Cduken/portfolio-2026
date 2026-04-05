@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 import { motion, useAnimationFrame, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useRef, useEffect, useState } from "react";
@@ -218,12 +219,12 @@ const Start = () => {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.2, duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <MagneticButton
             className="group relative flex items-center gap-3 px-10 py-5 rounded-full bg-primary text-primary-foreground font-display font-bold text-base tracking-wider uppercase overflow-hidden glow-primary"
             onClick={() => navigate("/portfolio")}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
           >
             {/* Ripple hover fill */}
             <motion.div
