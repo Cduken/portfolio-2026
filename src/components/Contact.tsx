@@ -63,7 +63,7 @@ const Contact = () => {
         {/* Social links */}
         <ScrollReveal delay={0.4}>
           <div className="flex justify-center gap-8 mt-20">
-            {["GitHub", "LinkedIn", "Twitter", "Dribbble"].map((social, i) => (
+            {["GitHub", "LinkedIn", "Twitter", "Dribbble"].map((social) => (
               <motion.a
                 key={social}
                 href="#"

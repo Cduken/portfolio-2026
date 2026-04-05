@@ -21,7 +21,7 @@ const Hero = () => {
       transition: {
         delay: 0.8 + i * 0.04,
         duration: 0.6,
-        ease: [0.25, 0.4, 0.25, 1],
+        ease: [0.25, 0.4, 0.25, 1] as const,
       },
     }),
   };
