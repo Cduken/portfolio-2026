@@ -25,7 +25,11 @@ const About = () => {
   const xRight = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section ref={sectionRef} id="about" className="relative py-32 px-6 overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="relative py-32 px-6 overflow-hidden"
+    >
       {/* Parallax background text */}
       <motion.div
         className="absolute top-20 left-0 font-display text-[8rem] md:text-[12rem] font-extrabold text-muted/30 whitespace-nowrap select-none pointer-events-none"
@@ -54,14 +58,16 @@ const About = () => {
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
               <p className="text-muted-foreground font-body leading-relaxed mb-4">
-                I'm a front-end developer obsessed with creating fluid, 
-                performant web experiences that blur the line between 
-                design and engineering.
+                I'm a fresh graduate passionate about front-end development,
+                eager to build clean, responsive, and user-friendly web
+                experiences. I enjoy turning ideas into interactive interfaces
+                that balance both design and functionality.
               </p>
               <p className="text-muted-foreground font-body leading-relaxed">
-                With 5+ years of crafting interfaces, I bring a meticulous 
-                eye for detail and a deep understanding of modern web 
-                technologies to every project.
+                Although I’m just starting my professional journey, I’m highly
+                motivated to learn, improve my skills, and contribute my best to
+                every project. I’m excited to gain real-world experience and
+                grow as a developer while working with modern web technologies.
               </p>
             </ScrollReveal>
           </div>
@@ -74,8 +80,12 @@ const About = () => {
                   <ScrollReveal key={skill.name} delay={0.1 * i}>
                     <div className="group">
                       <div className="flex justify-between mb-2">
-                        <span className="font-body text-sm text-foreground">{skill.name}</span>
-                        <span className="font-body text-xs text-muted-foreground">{skill.level}%</span>
+                        <span className="font-body text-sm text-foreground">
+                          {skill.name}
+                        </span>
+                        <span className="font-body text-xs text-muted-foreground">
+                          {skill.level}%
+                        </span>
                       </div>
                       <div className="h-px bg-border relative overflow-hidden">
                         <motion.div

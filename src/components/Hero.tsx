@@ -21,7 +21,7 @@ const Hero = () => {
       transition: {
         delay: 0.8 + i * 0.04,
         duration: 0.6,
-        ease: [0.25, 0.4, 0.25, 1] as const,
+        ease: "easeOut" as const,
       },
     }),
   };
@@ -120,6 +120,23 @@ const Hero = () => {
           </div>
         </div>
 
+      
+        <motion.div
+          className="flex flex-wrap items-center gap-2 mb-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3, duration: 0.5 }}
+        >
+          {["Web Developer", "IT Student"].map((tag) => (
+            <span
+              key={tag}
+              className="text-xs font-body tracking-[0.2em] uppercase px-3 py-1.5 rounded-full border border-primary/20 text-primary/70"
+            >
+              {tag}
+            </span>
+          ))}
+        </motion.div>
+
         {/* Tagline */}
         <motion.p
           className="text-lg md:text-xl text-muted-foreground max-w-md font-body leading-relaxed mb-12"
@@ -127,9 +144,11 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.6 }}
         >
-          I’m a fresh graduate from Mater Dei College, passionate about building
-          modern, responsive websites and continuously learning to improve my
-          craft in web development.
+          I build interfaces that feel as good as they look — blending{" "}
+          <span className="text-foreground">clean code</span>,
+          <span className="text-primary"> fluid motion</span>, and
+          <span className="text-accent"> thoughtful design</span> into every
+          pixel.
         </motion.p>
 
         {/* CTA */}
