@@ -80,7 +80,7 @@ const Start = () => {
   const displayedText = useTypewriterOnce();
   const [labelIndex, setLabelIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const { count, isLoading } = useVisitorCount(); // 👈 Destructure the object
+  const { count, isLoading } = useVisitorCount();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -280,7 +280,7 @@ const Start = () => {
           <span className="text-xs text-muted-foreground/50 font-body tracking-widest">
             {count.toLocaleString()} visitors
           </span>
-          
+
           {/* Tooltip on hover */}
           <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-background/90 backdrop-blur-sm rounded text-[10px] text-muted-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
             Total portfolio visits

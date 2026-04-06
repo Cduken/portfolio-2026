@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const BASE_URL = "https://api.counterapi.dev/v2/cdukenzxc/portfolio-visitors";
 
 export function useVisitorCount() {
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
