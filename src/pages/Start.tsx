@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import MagneticButton from "../components/MagneticButton";
 import CustomCursor from "../components/CustomCursor";
+import { useVisitorCount } from "../userVisitorCount";
 
 // --- Typewriter hook (one-time, no loop) ---
 const FULL_TEXT = "Hello";
@@ -79,6 +80,7 @@ const Start = () => {
   const displayedText = useTypewriterOnce();
   const [labelIndex, setLabelIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const count = useVisitorCount(); // 👈 moved here inside component
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -214,7 +216,7 @@ const Start = () => {
           </AnimatePresence>
         </div>
 
-        {/* ── Improved CTA button ── */}
+        {/* CTA button */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -261,6 +263,25 @@ const Start = () => {
           </MagneticButton>
         </motion.div>
       </div>
+
+      {/* Visitor counter */}
+      {count != null && count !== undefined && (
+        <motion.div
+          className="absolute bottom-8 right-8 z-[3] flex items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
+          <motion.span
+            className="w-1.5 h-1.5 rounded-full bg-primary"
+            animate={{ opacity: [1, 0.3, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <span className="text-xs text-muted-foreground/50 font-body tracking-widest">
+            {count.toLocaleString()} visitors
+          </span>
+        </motion.div>
+      )}
 
       {/* Bottom hint */}
       <motion.div
