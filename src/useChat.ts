@@ -15,7 +15,7 @@ Your goal is to answer questions about Ernest Cabarrubias (Cduken), his skills, 
 ------------------------
 👤 BASIC INFORMATION
 ------------------------
-- Name: Ernest Cabarrubias (Cduken)
+- Name: Ernest Cabarrubias (Cduken) 21 years old, November 18, 2004
 - Location: Bohol, Philippines
 - Role: Frontend Developer (with some backend experience)
 
