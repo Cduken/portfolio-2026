@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-// hooks/useVisitorCount.ts
 import { useState, useEffect } from 'react'
+
+const BASE_URL = 'https://api.counterapi.dev/v2/ernest-cabarrubiass-team-3615/first-counter-3615'
 
 export function useVisitorCount() {
   const [count, setCount] = useState<number>(0)
@@ -8,7 +9,7 @@ export function useVisitorCount() {
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_COUNTER_API_KEY
-    
+
     if (!apiKey) {
       console.warn('API key not configured')
       setIsLoading(false)
@@ -16,19 +17,14 @@ export function useVisitorCount() {
     }
 
     const hasVisited = sessionStorage.getItem('portfolio_visited')
-    
-    // Use CORS proxy to bypass restrictions
-    const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'
-    const endpoint = hasVisited
-      ? 'https://api.counterapi.dev/v2/ernest-cabarrubiass-team-3615/first-counter-3615'
-      : 'https://api.counterapi.dev/v2/ernest-cabarrubiass-team-3615/first-counter-3615/up'
+    const endpoint = hasVisited ? BASE_URL : `${BASE_URL}/up`
+    const method = hasVisited ? 'GET' : 'POST'
 
-    fetch(CORS_PROXY + endpoint, {
-      method: hasVisited ? 'GET' : 'POST',
+    fetch(endpoint, {
+      method,
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest' // Required by cors-anywhere
       }
     })
       .then(res => {
@@ -45,7 +41,6 @@ export function useVisitorCount() {
       })
       .catch(err => {
         console.debug('Counter unavailable:', err.message)
-        setCount(0)
       })
       .finally(() => {
         setIsLoading(false)
