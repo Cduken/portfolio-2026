@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import MagneticButton from "./MagneticButton";
+import Cdu from '../assets/gallery/cdu.jpg';
 
 const Hero = () => {
   const containerRef = useRef(null);
@@ -295,7 +296,7 @@ const Hero = () => {
           >
             {/* 👇 Replace /your-photo.jpg with your actual image in /public */}
             <img
-              src="/src/assets/gallery/cdu.jpg"
+              src={Cdu}
               alt="Ernest Cabarrubias"
               className="w-full h-full object-cover"
               onError={() => setImgError(true)}
