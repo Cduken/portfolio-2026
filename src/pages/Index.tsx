@@ -6,6 +6,8 @@ import Projects from "../components/Projects";
 import Gallery from "../components/Gallery";
 import Contact from "../components/Contact";
 
+import ChatBot from "../chatWidget";
+
 const Index = () => {
   return (
     <div className="relative">
@@ -16,6 +18,8 @@ const Index = () => {
       <Projects />
       <Gallery />
       <Contact />
+
+      <ChatBot />
     </div>
   );
 };
