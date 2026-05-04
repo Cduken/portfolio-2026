@@ -40,6 +40,17 @@ import RSS7 from "../assets/projects/rss7.jpg";
 import RSS8 from "../assets/projects/rss8.jpg";
 import RSS9 from "../assets/projects/rss9.jpg";
 
+//PinkleBall images
+import Pinkleball1 from '../assets/projects/pb1.jpg';
+import Pinkleball2 from '../assets/projects/pb2.jpg';
+import Pinkleball3 from '../assets/projects/pb3.jpg';
+import Pinkleball4 from '../assets/projects/pb4.jpg';
+import Pinkleball5 from '../assets/projects/pb5.jpg';
+import Pinkleball6 from '../assets/projects/pb6.jpg';
+import Pinkleball7 from '../assets/projects/pb7.jpg';
+import Pinkleball8 from '../assets/projects/pb8.jpg';
+
+
 
 const projects: Project[] = [
   {
@@ -51,6 +62,7 @@ const projects: Project[] = [
     tags: ["Laravel", "Blade", "Tailwind CSS", "MySQL"],
     color: "from-primary/20 to-accent/10",
     year: "2025",
+    link: "#",
     images: [
       ShopEase1,
       ShopEase2,
@@ -79,6 +91,7 @@ const projects: Project[] = [
     tags: ["VueJS", "InertiaJS", "Tailwind CSS", "MySQL"],
     color: "from-accent/20 to-primary/10",
     year: "2025",
+    link: "",
     images: [
       Aquatrack1,
       Aquatrack2,
@@ -97,6 +110,7 @@ const projects: Project[] = [
     tags: ["ReactJS", "InertiaJS", "Tailwind CSS", "MySQL"],
     color: "from-primary/15 to-secondary",
     year: "2026",
+    link: "https://report-submission.dilgbohol.com/",
     images: [
       RSS1,
       RSS2,
@@ -109,21 +123,29 @@ const projects: Project[] = [
       RSS9
     ],
   },
-  // {
-  //   id: 4,
-  //   title: "Aether",
-  //   subtitle: "SaaS Platform",
-  //   description:
-  //     "A sophisticated project management tool with real-time collaboration, beautiful charts, and drag-and-drop workflows.",
-  //   tags: ["React", "Socket.io", "PostgreSQL"],
-  //   color: "from-accent/15 to-muted",
-  //   year: "2023",
-  //   images: [
-  //     "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1200&q=80",
-  //     "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&q=80",
-  //     "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80",
-  //   ],
-  // },
+
+   {
+    id: 4,
+    title: "PinkleBall",
+    subtitle: "A pickleball court reservation system",
+    description:
+      "A user-friendly pickleball court reservation system that allows players to easily book courts, view availability, and manage their reservations. The platform features a responsive design and real-time updates to ensure a seamless booking experience for pickleball enthusiasts.",
+    tags: ["ReactJS", "TypeScript", "Tailwind CSS", "Supabase"],
+    color: "from-primary/15 to-secondary",
+    year: "2026",
+    link: "https://pinkleball.vercel.app/",
+    images: [
+      Pinkleball1,
+      Pinkleball2,
+      Pinkleball3,
+      Pinkleball4,
+      Pinkleball5,
+      Pinkleball6,
+      Pinkleball7,
+      Pinkleball8
+    ],
+  },
+ 
 ];
 
 const Projects = () => {

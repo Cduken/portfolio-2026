@@ -9,13 +9,14 @@ import DILG3 from "../assets/gallery/dilg3.jpg";
 
 // Myself images
 import Myself1 from "../assets/gallery/cdu.jpg";
-import Myself2 from "../assets/gallery/ernest.jpg";
+import Myself2 from "../assets/gallery/grad2.jpg";
 import Myself3 from "../assets/gallery/me3.jpg";
 import Myself4 from "../assets/gallery/me4.jpg";
 import Myself5 from "../assets/gallery/me5.jpg";
 import Myself6 from "../assets/gallery/me6.jpg";
 import Myself7 from "../assets/gallery/me7.jpg";
 import Myself8 from "../assets/gallery/me8.jpg";
+import Myself9 from "../assets/gallery/grad3.jpg";
 
 
 //Setup images
@@ -37,7 +38,6 @@ const galleryImages: GalleryImage[] = [
   { id: 1, src: DILG1, alt: "Team collaboration", category: "Internship", caption: "Turnover of the newly developed report submission system." },
   { id: 2, src: DILG2, alt: "Office meeting", category: "Internship", caption: "Picture together with the advisors and mentors during the turnover." },
   { id: 3, src: DILG3, alt: "Open office", category: "Internship", caption: "Awarded a certification by the Provincial Director during the turnover." },
-
   { id: 5, src: Myself1, alt: "Portrait", category: "Myself", caption: "Stolen shot from a friend" },
   { id: 6, src: Myself2, alt: "Candid shot", category: "Myself", caption: "College graduation pictorial" },
   { id: 7, src: Myself3, alt: "Street photo", category: "Myself", caption: "Stolen shot" },
@@ -46,7 +46,7 @@ const galleryImages: GalleryImage[] = [
   { id: 10, src: Myself6, alt: "Monitor code", category: "Myself", caption: "Gym flex" },
   { id: 11, src: Myself7, alt: "Tech event", category: "Myself", caption: "Gym flex" },
   { id: 12, src: Myself8, alt: "Workshop", category: "Myself", caption: "Selfie in our multicab" },
-
+    { id: 13, src: Myself9, alt: "Graduation", category: "Myself", caption: "College graduation pictorial" },
   { id: 13, src: Setup1, alt: "Work setup", category: "Setup", caption: "My coding sanctuary" },
 ];
 

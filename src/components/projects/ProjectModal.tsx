@@ -10,6 +10,7 @@ export type Project = {
   color: string;
   year: string;
   images: string[];
+  link: string;
 };
 
 const variants = {
@@ -36,8 +37,8 @@ const ProjectModal = ({
 
   const paginate = (dir: number) => {
     setDirection(dir);
-    setImgIndex((prev) =>
-      (prev + dir + project.images.length) % project.images.length
+    setImgIndex(
+      (prev) => (prev + dir + project.images.length) % project.images.length,
     );
   };
 
@@ -146,15 +147,33 @@ const ProjectModal = ({
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1.5">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs px-2.5 py-1 rounded-full border border-primary/30 text-primary/80 font-body tracking-wide"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex flex-wrap gap-1.5 justify-between items-center">
+            <div className="flex gap-3">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs px-2.5 py-1 rounded-full border border-primary/30 text-primary/80 font-body tracking-wide"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <p className="text-primary font-bold leading-relaxed text-sm hover:text-primary hover:underline transition-colors duration-200">
+              {project.link && project.link !== "#" ? (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Project
+                </a>
+              ) : (
+                <span className="text-sm text-muted-foreground/50 font-body cursor-not-allowed select-none italic">
+                  Not Deployed Yet
+                </span>
+              )}
+            </p>
           </div>
         </div>
       </motion.div>

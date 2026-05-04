@@ -18,7 +18,6 @@ const Index = () => {
       <Projects />
       <Gallery />
       <Contact />
-
       <ChatBot />
     </div>
   );

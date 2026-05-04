@@ -1,17 +1,28 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import ScrollReveal from "./ScrollReveal";
+import {
+  SiHtml5,
+  SiCss,
+  SiTailwindcss,
+  SiJavascript,
+  SiReact,
+  SiVuedotjs,
+  SiNodedotjs,
+  SiPhp,
+  SiLaravel,
+} from "react-icons/si";
 
 const skills = [
-  { name: "HTML", level: 90 },
-  { name: "CSS", level: 80 },
-  { name: "Tailwind CSS", level: 70 },
-  { name: "JavaScript", level: 60 },
-  { name: "React", level: 50 },
-  { name: "VueJS", level: 50 },
-  { name: "Node.js", level: 70 },
-  { name: "PHP", level: 80 },
-  { name: "Laravel", level: 80 },
+  { name: "HTML", Icon: SiHtml5, color: "#E44D26" },
+  { name: "CSS", Icon: SiCss, color: "#1572B6" },
+  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#38BDF8" },
+  { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
+  { name: "React", Icon: SiReact, color: "#61DAFB" },
+  { name: "Vue JS", Icon: SiVuedotjs, color: "#42B883" },
+  { name: "Node.js", Icon: SiNodedotjs, color: "#339933" },
+  { name: "PHP", Icon: SiPhp, color: "#8892BF" },
+  { name: "Laravel", Icon: SiLaravel, color: "#FF2D20" },
 ];
 
 const About = () => {
@@ -40,7 +51,7 @@ const About = () => {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid md:grid-cols-12 gap-12 md:gap-16 items-start">
-          {/* Left column - asymmetric */}
+          {/* Left column */}
           <div className="md:col-span-5 md:mt-20">
             <ScrollReveal>
               <span className="text-sm font-body text-primary tracking-[0.3em] uppercase mb-4 block">
@@ -64,47 +75,53 @@ const About = () => {
                 that balance both design and functionality.
               </p>
               <p className="text-muted-foreground font-body leading-relaxed">
-                Although I’m just starting my professional journey, I’m highly
+                Although I'm just starting my professional journey, I'm highly
                 motivated to learn, improve my skills, and contribute my best to
-                every project. I’m excited to gain real-world experience and
+                every project. I'm excited to gain real-world experience and
                 grow as a developer while working with modern web technologies.
               </p>
             </ScrollReveal>
           </div>
 
-          {/* Right column - skills */}
+          {/* Right column — My Stack */}
           <div className="md:col-span-7">
-            <ScrollReveal delay={0.3}>
-              <div className="space-y-6">
-                {skills.map((skill, i) => (
-                  <ScrollReveal key={skill.name} delay={0.1 * i}>
-                    <div className="group">
-                      <div className="flex justify-between mb-2">
-                        <span className="font-body text-sm text-foreground">
-                          {skill.name}
-                        </span>
-                        <span className="font-body text-xs text-muted-foreground">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="h-px bg-border relative overflow-hidden">
-                        <motion.div
-                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-accent"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{
-                            duration: 1.2,
-                            delay: 0.2 + i * 0.1,
-                            ease: [0.25, 0.4, 0.25, 1],
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </div>
+            <ScrollReveal delay={0.2}>
+              <span className="text-sm font-body text-primary tracking-[0.3em] uppercase mb-6 block">
+                My Stack
+              </span>
             </ScrollReveal>
+
+            <div className="grid grid-cols-3 gap-3">
+              {skills.map((skill, i) => (
+                <ScrollReveal key={skill.name} delay={0.05 * i}>
+                  <motion.div
+                    className="group relative flex flex-col items-center justify-center gap-2.5 py-6 rounded-xl border border-border bg-card/50 backdrop-blur-sm cursor-default overflow-hidden"
+                    whileHover={{ y: -3 }}
+                    transition={{ duration: 0.22, ease: "easeOut" }}
+                  >
+                    {/* Subtle brand-color glow on hover */}
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
+                      style={{
+                        background: `radial-gradient(ellipse at 50% 60%, ${skill.color}18 0%, transparent 70%)`,
+                      }}
+                    />
+
+                    {/* Icon */}
+                    <skill.Icon
+                      size={32}
+                      style={{ color: skill.color }}
+                      className="relative z-10 transition-transform duration-200 group-hover:scale-110"
+                    />
+
+                    {/* Label */}
+                    <span className="relative z-10 font-body text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200 text-center leading-tight px-2">
+                      {skill.name}
+                    </span>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
+            </div>
 
             {/* Stats */}
             <motion.div
