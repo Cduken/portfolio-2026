@@ -114,22 +114,7 @@ const Hero = () => {
       >
         {/* LEFT — text */}
         <div className="flex-1 flex flex-col items-start">
-          {/* Status pill */}
-          <motion.div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/20 bg-accent/5 mb-7"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-accent"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <span className="text-[10px] font-body text-accent/80 tracking-[0.35em] uppercase">
-              Open to opportunities
-            </span>
-          </motion.div>
+        
 
           {/* First name */}
           <div className="mb-1 overflow-hidden">
@@ -183,7 +168,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.5 }}
           >
-            {[ "Web Developer"].map((tag) => (
+            {[ " Frontend Developer"].map((tag) => (
               <span
                 key={tag}
                 className="text-[10px] font-body tracking-[0.2em] uppercase px-3 py-1 rounded-full border border-primary/15 text-primary/60 bg-primary/5"

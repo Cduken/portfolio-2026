@@ -90,7 +90,7 @@ const About = () => {
                 My Stack
               </span>
             </ScrollReveal>
-
+    
             <div className="grid grid-cols-3 gap-3">
               {skills.map((skill, i) => (
                 <ScrollReveal key={skill.name} delay={0.05 * i}>
