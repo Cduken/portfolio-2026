@@ -101,7 +101,7 @@ const Hero = () => {
 
   const firstName = "Ernest";
   const lastName = "Cabarrubias";
-  const fullName = firstName + " " + lastName;
+  // const fullName = firstName + " " + lastName;
 
   const s = {
     section: {
