@@ -1,216 +1,321 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+// Contact.tsx — Dark Editorial Redesign with GSAP ScrollTrigger
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaGithub, FaLinkedin, FaInstagram, FaFacebook } from "react-icons/fa";
-import { ArrowUpRight, Mail } from "lucide-react";
-import ScrollReveal from "./ScrollReveal";
-import MagneticButton from "./MagneticButton";
 import ContactModal from "./ContactModal";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SOCIALS = [
   {
     label: "GitHub",
     href: "https://github.com/Cduken",
-    icon: FaGithub,
-    // GitHub: dark charcoal
-    color: "hover:text-[#e6edf3] hover:border-[#e6edf3]/40",
-    glow: "bg-[#e6edf3]/5",
-    iconColor: "group-hover:text-[#e6edf3]",
+    Icon: FaGithub,
+    accent: "#e6edf3",
   },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/ernestojr-cabarrubias-3154342a1/",
-    icon: FaLinkedin,
-    // LinkedIn: brand blue
-    color: "hover:text-[#0A66C2] hover:border-[#0A66C2]/40",
-    glow: "bg-[#0A66C2]/5",
-    iconColor: "group-hover:text-[#0A66C2]",
+    Icon: FaLinkedin,
+    accent: "#0A66C2",
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/cdukenzxc",
-    icon: FaInstagram,
-    // Instagram: pink/magenta
-    color: "hover:text-[#E1306C] hover:border-[#E1306C]/40",
-    glow: "bg-[#E1306C]/5",
-    iconColor: "group-hover:text-[#E1306C]",
+    Icon: FaInstagram,
+    accent: "#E1306C",
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/cdukenzxc",
-    icon: FaFacebook,
-    // Facebook: brand blue
-    color: "hover:text-[#1877F2] hover:border-[#1877F2]/40",
-    glow: "bg-[#1877F2]/5",
-    iconColor: "group-hover:text-[#1877F2]",
+    Icon: FaFacebook,
+    accent: "#1877F2",
   },
 ];
 
 const Contact = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const bigTextRef = useRef<HTMLDivElement>(null);
   const [contactOpen, setContactOpen] = useState(false);
-  const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
-  const sectionRef = useRef(null);
-  const currentYear = new Date().getFullYear();
+  const [hovBtn, setHovBtn] = useState(false);
+  const [hovSocial, setHovSocial] = useState<string | null>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end end"],
-  });
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ── Big background text pinned slow scroll ──────────────────────────
+      gsap.to(bigTextRef.current, {
+        yPercent: -12,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
 
-  const rotate = useTransform(scrollYProgress, [0, 1], [-10, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 0.95, 1]);
+      // ── Divider draw in ─────────────────────────────────────────────────
+      gsap.from(".contact-hr-top", {
+        scaleX: 0,
+        transformOrigin: "left",
+        duration: 1,
+        ease: "power2.inOut",
+        scrollTrigger: { trigger: ".contact-hr-top", start: "top 88%" },
+      });
+
+      // ── Eyebrow clip-up ─────────────────────────────────────────────────
+      gsap.from(".contact-eyebrow", {
+        yPercent: 100,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-eyebrow", start: "top 88%" },
+      });
+
+      // ── Big headline letters ────────────────────────────────────────────
+      gsap.from(".contact-heading .split-line", {
+        yPercent: 110,
+        opacity: 0,
+        duration: 0.85,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".contact-heading", start: "top 85%" },
+      });
+
+      // ── Sub + button ────────────────────────────────────────────────────
+      gsap.from([".contact-sub", ".contact-cta"], {
+        y: 28,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".contact-sub", start: "top 85%" },
+      });
+
+      // ── Social links cascade ────────────────────────────────────────────
+      gsap.from(".social-link", {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".social-link", start: "top 88%" },
+      });
+
+      // ── Footer fade ─────────────────────────────────────────────────────
+      gsap.from(".contact-footer", {
+        opacity: 0,
+        y: 16,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".contact-footer", start: "top 92%" },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const year = new Date().getFullYear();
+
+  const s = {
+    section: {
+      position: "relative" as const,
+      background: "#0a0a0a",
+      padding: "130px 52px 80px",
+      overflow: "hidden",
+    },
+    scanLines: {
+      position: "absolute" as const,
+      inset: 0,
+      background: `repeating-linear-gradient(180deg,transparent,transparent 2px,rgba(255,255,255,0.01) 2px,rgba(255,255,255,0.012) 4px)`,
+      pointerEvents: "none" as const,
+    },
+    bigText: {
+      position: "absolute" as const,
+      top: "20%",
+      left: "50%",
+      transform: "translateX(-50%)",
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(100px, 20vw, 220px)",
+      color: "rgba(255,255,255,0.02)",
+      whiteSpace: "nowrap" as const,
+      pointerEvents: "none" as const,
+      userSelect: "none" as const,
+      letterSpacing: "0.06em",
+    },
+    inner: {
+      position: "relative" as const,
+      zIndex: 2,
+      maxWidth: 900,
+      margin: "0 auto",
+      textAlign: "center" as const,
+    },
+    hr: {
+      height: 1,
+      background: "rgba(255,255,255,0.08)",
+      marginBottom: 60,
+    },
+    eyebrowWrap: { overflow: "hidden", marginBottom: 20 },
+    eyebrow: {
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.4em",
+      textTransform: "uppercase" as const,
+      color: "#c8ff00",
+    },
+    headingRow: { overflow: "hidden", lineHeight: 1, marginBottom: 6 },
+    h2: {
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(64px, 10vw, 120px)",
+      lineHeight: 0.9,
+      color: "#f2ede6",
+      display: "block",
+    },
+    h2Acc: {
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(64px, 10vw, 120px)",
+      lineHeight: 0.9,
+      background: "linear-gradient(135deg,#c8ff00 0%,#ff2d2d 100%)",
+      WebkitBackgroundClip: "text" as const,
+      WebkitTextFillColor: "transparent" as const,
+      backgroundClip: "text" as const,
+      display: "block",
+    },
+    sub: {
+      fontFamily: "'DM Sans', sans-serif",
+      fontWeight: 300,
+      fontSize: 14,
+      color: "rgba(255,255,255,0.3)",
+      lineHeight: 1.8,
+      maxWidth: 380,
+      margin: "32px auto 48px",
+    },
+    btn: (hov: boolean) => ({
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.3em",
+      textTransform: "uppercase" as const,
+      fontWeight: 700,
+      padding: "16px 36px",
+      background: hov ? "#0a0a0a" : "#c8ff00",
+      color: hov ? "#c8ff00" : "#0a0a0a",
+      border: "1px solid #c8ff00",
+      cursor: "pointer",
+      transition: "all 0.25s",
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 10,
+      marginBottom: 64,
+    }),
+    socialsRow: {
+      display: "flex",
+      justifyContent: "center",
+      flexWrap: "wrap" as const,
+      gap: 10,
+      marginBottom: 80,
+    },
+    socialLink: (hov: boolean, accent: string) => ({
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "10px 18px",
+      border: `1px solid ${hov ? `${accent}40` : "rgba(255,255,255,0.08)"}`,
+      background: hov ? `${accent}10` : "transparent",
+      color: hov ? accent : "rgba(255,255,255,0.3)",
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.2em",
+      textTransform: "uppercase" as const,
+      textDecoration: "none",
+      transition: "all 0.22s",
+      transform: hov ? "translateY(-3px)" : "translateY(0)",
+    }),
+    footerRow: {
+      borderTop: "1px solid rgba(255,255,255,0.06)",
+      paddingTop: 32,
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    footMono: {
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 8,
+      letterSpacing: "0.2em",
+      textTransform: "uppercase" as const,
+      color: "rgba(255,255,255,0.15)",
+    },
+  };
 
   return (
-    <section
-      ref={sectionRef}
-      id="contact"
-      className="relative py-32 px-6 overflow-hidden"
-    >
-      {/* Ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle at center, hsl(var(--primary)) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-      />
+    <section ref={sectionRef} id="contact" style={s.section}>
+      <div style={s.scanLines} aria-hidden />
+      <div ref={bigTextRef} style={s.bigText} aria-hidden>
+        CONTACT
+      </div>
 
-      <motion.div
-        className="max-w-5xl mx-auto text-center"
-        style={{ rotateX: rotate, scale, perspective: 1000 }}
-      >
-        {/* Eyebrow */}
-        <ScrollReveal>
-          <span className="text-sm font-body text-primary tracking-[0.3em] uppercase mb-8 block">
+      <div style={s.inner}>
+        <div className="contact-hr-top" style={s.hr} />
+
+        <div style={s.eyebrowWrap}>
+          <span className="contact-eyebrow" style={s.eyebrow}>
             03 / Get in Touch
           </span>
-        </ScrollReveal>
+        </div>
 
-        {/* Headline */}
-        <ScrollReveal delay={0.1}>
-          <h2 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] mb-8">
-            Let's create
-            <br />
-            <span className="text-gradient-primary">something</span>
-            <br />
-            extraordinary.
-          </h2>
-        </ScrollReveal>
-
-        {/* Subline */}
-        <ScrollReveal delay={0.2}>
-          <p className="text-muted-foreground font-body text-lg max-w-md mx-auto mb-14">
-            Have a project in mind? I'd love to hear about it. Let's discuss how
-            we can work together.
-          </p>
-        </ScrollReveal>
-
-        {/* CTA Button */}
-        <ScrollReveal delay={0.3}>
-          <div className="flex justify-center mb-20">
-            <MagneticButton
-              onClick={() => setContactOpen(true)}
-              className="group relative flex items-center gap-3 px-10 py-5 rounded-full bg-primary text-primary-foreground font-display font-bold text-base tracking-wider uppercase overflow-hidden"
-            >
-              <motion.div
-                className="absolute inset-0 rounded-full bg-accent"
-                initial={{ scale: 0, opacity: 0 }}
-                whileHover={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              />
-              <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-full bg-primary-foreground/15 group-hover:rotate-12 transition-transform duration-300">
-                <Mail className="w-4 h-4" />
+        <div className="contact-heading">
+          {[
+            { text: "Let's create", accent: false },
+            { text: "something", accent: true },
+            { text: "extraordinary.", accent: false },
+          ].map((row, i) => (
+            <div key={i} style={s.headingRow}>
+              <span className="split-line" style={row.accent ? s.h2Acc : s.h2}>
+                {row.text}
               </span>
-              <span className="relative z-10">Say Hello</span>
-              <motion.span
-                className="relative z-10"
-                initial={{ x: -6, opacity: 0 }}
-                whileHover={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ArrowUpRight className="w-4 h-4" />
-              </motion.span>
-            </MagneticButton>
-          </div>
-        </ScrollReveal>
+            </div>
+          ))}
+        </div>
 
-        {/* Social links */}
-        <ScrollReveal delay={0.4}>
-          <div className="flex justify-center flex-wrap gap-3">
-            {SOCIALS.map(
-              ({ label, href, icon: Icon, color, glow, iconColor }) => {
-                const isHovered = hoveredSocial === label;
-                return (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onHoverStart={() => setHoveredSocial(label)}
-                    onHoverEnd={() => setHoveredSocial(null)}
-                    whileHover={{ y: -3 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    className={`group relative flex items-center gap-2 px-5 py-3 rounded-full border border-border bg-background/50 backdrop-blur-sm text-sm font-body text-muted-foreground transition-colors duration-200 cursor-pointer ${color}`}
-                  >
-                    {/* Platform icon with wiggle */}
-                    <motion.span
-                      animate={
-                        isHovered
-                          ? { rotate: [0, -10, 10, 0], scale: 1.2 }
-                          : { rotate: 0, scale: 1 }
-                      }
-                      transition={{ duration: 0.35 }}
-                      className={`flex items-center transition-colors duration-200 ${iconColor}`}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </motion.span>
+        <p className="contact-sub" style={s.sub}>
+          Have a project in mind? I'd love to hear about it. Let's discuss how
+          we can work together.
+        </p>
 
-                    {/* Label */}
-                    <span>{label}</span>
+        <div className="contact-cta">
+          <button
+            style={s.btn(hovBtn)}
+            onMouseEnter={() => setHovBtn(true)}
+            onMouseLeave={() => setHovBtn(false)}
+            onClick={() => setContactOpen(true)}
+          >
+            ✉ Say Hello {hovBtn ? "↗" : ""}
+          </button>
+        </div>
 
-                    {/* External arrow on hover */}
-                    <motion.span
-                      initial={{ opacity: 0, x: -4 }}
-                      animate={
-                        isHovered ? { opacity: 1, x: 0 } : { opacity: 0, x: -4 }
-                      }
-                      transition={{ duration: 0.15 }}
-                      className="flex items-center"
-                    >
-                      <ArrowUpRight className="w-3 h-3" />
-                    </motion.span>
+        <div style={s.socialsRow}>
+          {SOCIALS.map(({ label, href, Icon, accent }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+              style={s.socialLink(hovSocial === label, accent)}
+              onMouseEnter={() => setHovSocial(label)}
+              onMouseLeave={() => setHovSocial(null)}
+            >
+              <Icon style={{ fontSize: 14 }} />
+              {label}
+            </a>
+          ))}
+        </div>
 
-                    {/* Brand-colored glow backdrop */}
-                    <motion.div
-                      className={`absolute inset-0 rounded-full ${glow}`}
-                      initial={{ opacity: 0 }}
-                      animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  </motion.a>
-                );
-              },
-            )}
-          </div>
-        </ScrollReveal>
-      </motion.div>
-
-      {/* Footer */}
-      <motion.div
-        className="max-w-6xl mx-auto mt-32 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <span className="text-xs text-muted-foreground font-body">
-          © {currentYear} — Ernest Cabarrubias
-        </span>
-        <span className="text-xs text-muted-foreground font-body">
-          Built with React, Framer Motion & Tailwind
-        </span>
-      </motion.div>
+        <div className="contact-footer" style={s.footerRow}>
+          <span style={s.footMono}>© {year} — Ernest Cabarrubias</span>
+          <span style={s.footMono}>Built with React · GSAP · Tailwind</span>
+        </div>
+      </div>
 
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
     </section>

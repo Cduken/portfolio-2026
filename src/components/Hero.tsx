@@ -1,222 +1,407 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
-import MagneticButton from "./MagneticButton";
-import Cdu from '../assets/gallery/cdu.jpg';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// Hero.tsx — Dark Editorial Redesign
+// Requires: gsap, gsap/ScrollTrigger
+// npm install gsap
+// Fonts in index.html:
+// <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Cdu from "../assets/gallery/cdu.jpg";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
-  const containerRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const imgRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLDivElement>(null);
+  const metaRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const bioRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const bgTextRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const [btnHover, setBtnHover] = useState<string | null>(null);
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -300]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ── Entry timeline ──────────────────────────────────────────────────
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // Name letters stagger up
+      tl.from(".hero-letter", {
+        yPercent: 110,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.035,
+        delay: 0.3,
+      })
+        .from(
+          lineRef.current,
+          {
+            scaleX: 0,
+            transformOrigin: "left",
+            duration: 0.7,
+            ease: "power2.inOut",
+          },
+          "-=0.3",
+        )
+        .from(metaRef.current, { y: 20, opacity: 0, duration: 0.6 }, "-=0.4")
+        .from(bioRef.current, { y: 24, opacity: 0, duration: 0.6 }, "-=0.4")
+        .from(ctaRef.current, { y: 20, opacity: 0, duration: 0.5 }, "-=0.3")
+        .from(
+          imgRef.current,
+          { x: 60, opacity: 0, duration: 1, ease: "power3.out" },
+          0.5,
+        );
+
+      // ── Scroll parallax ─────────────────────────────────────────────────
+      if (bgTextRef.current) {
+        gsap.to(bgTextRef.current, {
+          xPercent: -18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      }
+
+      // Photo parallax up
+      gsap.to(imgRef.current, {
+        yPercent: -15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // Left text fades as you scroll away
+      gsap.to(".hero-left", {
+        opacity: 0,
+        y: -40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "30% top",
+          end: "80% top",
+          scrub: 1,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const firstName = "Ernest";
   const lastName = "Cabarrubias";
+  const fullName = firstName + " " + lastName;
 
-  const letterVariants = {
-    hidden: { y: "110%", opacity: 0 },
-    visible: (i: number) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        delay: 0.6 + i * 0.045,
-        duration: 0.7,
-        ease: [0.25, 0.4, 0.25, 1] as const,
-      },
+  const s = {
+    section: {
+      position: "relative" as const,
+      minHeight: "100vh",
+      background: "#0a0a0a",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden",
+      padding: "0 52px",
+    },
+    scanLines: {
+      position: "absolute" as const,
+      inset: 0,
+      background: `repeating-linear-gradient(180deg,transparent,transparent 2px,rgba(255,255,255,0.012) 2px,rgba(255,255,255,0.014) 4px)`,
+      pointerEvents: "none" as const,
+      zIndex: 5,
+    },
+    bgText: {
+      position: "absolute" as const,
+      top: "50%",
+      left: "0",
+      transform: "translateY(-50%)",
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(120px, 22vw, 240px)",
+      color: "rgba(255,255,255,0.025)",
+      whiteSpace: "nowrap" as const,
+      pointerEvents: "none" as const,
+      userSelect: "none" as const,
+      zIndex: 0,
+      letterSpacing: "0.04em",
+    },
+    grid: {
+      position: "absolute" as const,
+      inset: 0,
+      backgroundImage: `linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)`,
+      backgroundSize: "60px 60px",
+      pointerEvents: "none" as const,
+      zIndex: 0,
+    },
+    redLine: {
+      position: "absolute" as const,
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 3,
+      background: "#ff2d2d",
+      zIndex: 6,
+    },
+    inner: {
+      position: "relative" as const,
+      zIndex: 2,
+      width: "100%",
+      maxWidth: 1200,
+      margin: "0 auto",
+      display: "flex",
+      alignItems: "center",
+      gap: 60,
+    },
+    left: {
+      flex: 1,
+    },
+    nameWrap: {
+      marginBottom: 20,
+    },
+    nameRow: {
+      overflow: "hidden",
+      lineHeight: 0.88,
+    },
+    letter: {
+      display: "inline-block",
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(72px, 11vw, 130px)",
+      color: "#f2ede6",
+      lineHeight: 0.88,
+    },
+    letterGrad: {
+      display: "inline-block",
+      fontFamily: "'Bebas Neue', sans-serif",
+      fontSize: "clamp(50px, 7.5vw, 88px)",
+      lineHeight: 0.88,
+      background: "linear-gradient(135deg, #c8ff00 0%, #ff2d2d 100%)",
+      WebkitBackgroundClip: "text" as const,
+      WebkitTextFillColor: "transparent" as const,
+      backgroundClip: "text" as const,
+    },
+    line: {
+      height: 1,
+      background:
+        "linear-gradient(90deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.04) 100%)",
+      maxWidth: 380,
+      marginBottom: 20,
+    },
+    meta: {
+      display: "flex",
+      flexWrap: "wrap" as const,
+      gap: 8,
+      marginBottom: 24,
+    },
+    tag: {
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.3em",
+      textTransform: "uppercase" as const,
+      color: "#c8ff00",
+      border: "1px solid rgba(200,255,0,0.25)",
+      padding: "5px 12px",
+    },
+    bio: {
+      fontFamily: "'DM Sans', sans-serif",
+      fontWeight: 300,
+      fontSize: 14,
+      lineHeight: 1.8,
+      color: "rgba(255,255,255,0.4)",
+      maxWidth: 340,
+      marginBottom: 36,
+    },
+    bioEm: {
+      color: "rgba(255,255,255,0.75)",
+      fontStyle: "normal",
+    },
+    cta: {
+      display: "flex",
+      gap: 12,
+      flexWrap: "wrap" as const,
+    },
+    btnPrimary: (hov: boolean) => ({
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.3em",
+      textTransform: "uppercase" as const,
+      fontWeight: 700,
+      padding: "14px 28px",
+      background: hov ? "#0a0a0a" : "#c8ff00",
+      color: hov ? "#c8ff00" : "#0a0a0a",
+      border: "1px solid #c8ff00",
+      cursor: "pointer",
+      transition: "all 0.25s",
     }),
+    btnSecondary: (hov: boolean) => ({
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 9,
+      letterSpacing: "0.3em",
+      textTransform: "uppercase" as const,
+      fontWeight: 700,
+      padding: "14px 28px",
+      background: "transparent",
+      color: hov ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.35)",
+      border: `1px solid ${hov ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.12)"}`,
+      cursor: "pointer",
+      transition: "all 0.25s",
+    }),
+    right: {
+      flexShrink: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    imgFrame: {
+      position: "relative" as const,
+      width: 300,
+      height: 380,
+    },
+    imgInner: {
+      width: "100%",
+      height: "100%",
+      overflow: "hidden",
+      border: "1px solid rgba(255,255,255,0.08)",
+    },
+    imgOverlay: {
+      position: "absolute" as const,
+      inset: 0,
+      background:
+        "linear-gradient(135deg, rgba(200,255,0,0.06) 0%, transparent 60%)",
+      pointerEvents: "none" as const,
+    },
+    cornerTL: {
+      position: "absolute" as const,
+      top: -8,
+      left: -8,
+      width: 20,
+      height: 20,
+      borderTop: "2px solid #c8ff00",
+      borderLeft: "2px solid #c8ff00",
+    },
+    cornerBR: {
+      position: "absolute" as const,
+      bottom: -8,
+      right: -8,
+      width: 20,
+      height: 20,
+      borderBottom: "2px solid #ff2d2d",
+      borderRight: "2px solid #ff2d2d",
+    },
+    imgBadge: {
+      position: "absolute" as const,
+      bottom: -16,
+      left: -20,
+      background: "#0a0a0a",
+      border: "1px solid rgba(255,255,255,0.1)",
+      padding: "10px 16px",
+      zIndex: 3,
+    },
+    badgeMono: {
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 8,
+      letterSpacing: "0.25em",
+      textTransform: "uppercase" as const,
+    },
+    scrollHint: {
+      position: "absolute" as const,
+      bottom: 36,
+      left: "50%",
+      transform: "translateX(-50%)",
+      display: "flex",
+      flexDirection: "column" as const,
+      alignItems: "center",
+      gap: 8,
+      zIndex: 6,
+    },
+    scrollMono: {
+      fontFamily: "'Space Mono', monospace",
+      fontSize: 8,
+      letterSpacing: "0.3em",
+      textTransform: "uppercase" as const,
+      color: "rgba(255,255,255,0.2)",
+    },
   };
 
   return (
-    <section
-      ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay"
-    >
-      {/* Diagonal background slice */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          background: `linear-gradient(
-            135deg,
-            hsl(220 14% 6%) 0%,
-            hsl(220 14% 6%) 55%,
-            hsl(220 12% 10%) 55%,
-            hsl(220 12% 10%) 100%
-          )`,
-        }}
-      />
+    <section ref={sectionRef} id="hero" style={s.section}>
+      <div style={s.scanLines} aria-hidden />
+      <div style={s.grid} aria-hidden />
+      <div style={s.redLine} aria-hidden />
 
-      {/* Grid lines */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none opacity-40"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: "50px 50px",
-        }}
-      />
+      {/* BIG background text */}
+      <div ref={bgTextRef} style={s.bgText} aria-hidden>
+        ERNEST CABARRUBIAS — PORTFOLIO —
+      </div>
 
-      {/* Glow blobs */}
-      <div
-        className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(circle, hsl(15 85% 60% / 0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(circle, hsl(165 60% 50% / 0.05) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Floating code decoration */}
-      <motion.div
-        className="absolute bottom-[18%] left-[3%] font-mono text-[0.6rem] text-primary/15 z-[1] pointer-events-none leading-relaxed hidden md:block"
-        style={{ y: y2 }}
-      >
-        {`const dev = {\n  name: "Ernest",\n  status: "learning"\n}`}
-      </motion.div>
-
-      {/* Decorative big tag */}
-      <motion.div
-        className="absolute top-[10%] right-[6%] font-display text-[6rem] font-extrabold text-primary/[0.03] select-none z-[1] pointer-events-none"
-        style={{ y: y1 }}
-      >
-        {"</>"}
-      </motion.div>
-
-      {/* Spinning rings */}
-      <motion.div
-        className="absolute top-[16%] left-[8%] w-20 h-20 rounded-full border border-dashed border-primary/10 z-[1] pointer-events-none"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div
-        className="absolute bottom-[20%] right-[10%] w-14 h-14 rounded-full border border-dashed border-accent/10 z-[1] pointer-events-none"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Main content */}
-      <motion.div
-        style={{ opacity, scale }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-2 flex flex-col md:flex-row items-center gap-10 md:gap-6"
-      >
-        {/* LEFT — text */}
-        <div className="flex-1 flex flex-col items-start">
-        
-
-          {/* First name */}
-          <div className="mb-1 overflow-hidden">
-            <div className="flex flex-wrap">
+      <div style={s.inner}>
+        {/* LEFT */}
+        <div className="hero-left" ref={nameRef} style={s.left}>
+          <div style={s.nameWrap}>
+            {/* First name */}
+            <div style={s.nameRow}>
               {firstName.split("").map((l, i) => (
-                <motion.span
-                  key={i}
-                  className="font-display text-[clamp(2.8rem,9vw,8rem)] font-extrabold leading-[0.88] text-foreground"
-                  variants={letterVariants}
-                  initial="hidden"
-                  animate="visible"
-                  custom={i}
-                >
+                <span key={i} className="hero-letter" style={s.letter}>
                   {l}
-                </motion.span>
+                </span>
               ))}
             </div>
-          </div>
-
-          {/* Last name */}
-          <div className="overflow-hidden mb-4">
-            <div className="flex flex-wrap">
+            {/* Space */}
+            <div style={{ height: 4 }} />
+            {/* Last name */}
+            <div style={s.nameRow}>
               {lastName.split("").map((l, i) => (
-                <motion.span
-                  key={i}
-                  className="font-display text-[clamp(1.8rem,6.5vw,5.5rem)] font-extrabold leading-[0.88] text-gradient-primary"
-                  variants={letterVariants}
-                  initial="hidden"
-                  animate="visible"
-                  custom={i + firstName.length}
-                >
+                <span key={i} className="hero-letter" style={s.letterGrad}>
                   {l}
-                </motion.span>
+                </span>
               ))}
             </div>
           </div>
 
-          {/* Divider */}
-          <motion.div
-            className="h-px bg-gradient-to-r from-primary/50 via-accent/30 to-transparent mb-5"
-            initial={{ scaleX: 0, originX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-            style={{ width: "100%", maxWidth: "340px" }}
-          />
+          <div ref={lineRef} style={s.line} />
 
-          {/* Tags */}
-          <motion.div
-            className="flex flex-wrap items-center gap-2 mb-5"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.5 }}
-          >
-            {[ " Frontend Developer"].map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-body tracking-[0.2em] uppercase px-3 py-1 rounded-full border border-primary/15 text-primary/60 bg-primary/5"
-              >
-                {tag}
-              </span>
-            ))}
-          </motion.div>
+          <div ref={metaRef} style={s.meta}>
+            {["Frontend Developer", "IT Graduate", "Mater Dei College"].map(
+              (t) => (
+                <span key={t} style={s.tag}>
+                  {t}
+                </span>
+              ),
+            )}
+          </div>
 
-          {/* Bio */}
-          <motion.p
-            className="text-sm md:text-base text-muted-foreground max-w-sm font-body leading-relaxed mb-9"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.7, duration: 0.6 }}
-          >
+          <p ref={bioRef} style={s.bio}>
             Fresh IT grad who enjoys turning ideas into{" "}
-            <span className="text-foreground/80">clean, interactive interfaces</span>.
-            I'm still growing — picking up new things on both the frontend and
-            backend, one project at a time.
-          </motion.p>
+            <em style={s.bioEm}>clean, interactive interfaces</em>. Growing on
+            both frontend and backend — one project at a time.
+          </p>
 
-          {/* CTAs */}
-          <motion.div
-            className="flex items-center gap-4 flex-wrap"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.9, duration: 0.6 }}
-          >
-            <MagneticButton
-              className="relative px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-display font-semibold text-xs tracking-wider uppercase overflow-hidden"
+          <div ref={ctaRef} style={s.cta}>
+            <button
+              style={s.btnPrimary(btnHover === "work")}
+              onMouseEnter={() => setBtnHover("work")}
+              onMouseLeave={() => setBtnHover(null)}
               onClick={() =>
                 document
                   .getElementById("projects")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              <motion.div
-                className="absolute inset-0 bg-accent"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-              <span className="relative z-10">View My Work</span>
-            </MagneticButton>
-
-            <MagneticButton
-              className="px-7 py-3.5 rounded-full border border-border text-foreground font-display font-semibold text-xs tracking-wider uppercase hover:border-primary/40 transition-colors"
+              View My Work →
+            </button>
+            <button
+              style={s.btnSecondary(btnHover === "hello")}
+              onMouseEnter={() => setBtnHover("hello")}
+              onMouseLeave={() => setBtnHover(null)}
               onClick={() =>
                 document
                   .getElementById("contact")
@@ -224,114 +409,91 @@ const Hero = () => {
               }
             >
               Say Hello
-            </MagneticButton>
-          </motion.div>
+            </button>
+          </div>
         </div>
 
         {/* RIGHT — photo */}
-        <motion.div
-          className="relative flex-shrink-0 flex items-center justify-center"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8, duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
-          style={{ y: y1 }}
-        >
-          {/* Outer spinning ring with orbiting dot */}
-          <motion.div
-            className="absolute w-[300px] h-[300px] md:w-[370px] md:h-[370px] rounded-full border border-primary/10"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          >
-            <div
-              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary"
-              style={{ boxShadow: "0 0 8px hsl(15 85% 60% / 0.8)" }}
-            />
-          </motion.div>
-
-          {/* Inner dashed ring */}
-          <motion.div
-            className="absolute w-[260px] h-[260px] md:w-[330px] md:h-[330px] rounded-full border border-dashed border-accent/10"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          />
-
-          {/* Corner brackets */}
-          {[
-            "top-4 left-4 border-t border-l",
-            "top-4 right-4 border-t border-r",
-            "bottom-4 left-4 border-b border-l",
-            "bottom-4 right-4 border-b border-r",
-          ].map((cls, i) => (
-            <motion.div
-              key={i}
-              className={`absolute w-5 h-5 border-primary/40 z-10 ${cls}`}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2 + i * 0.1 }}
-            />
-          ))}
-
-          {/* Photo */}
-          <div
-            className="relative w-[210px] h-[210px] md:w-[270px] md:h-[270px] rounded-full overflow-hidden border-2 border-primary/20 z-[2]"
-            style={{
-              boxShadow:
-                "0 0 40px hsl(15 85% 60% / 0.12), 0 0 80px hsl(15 85% 60% / 0.05)",
-            }}
-          >
-            {/* 👇 Replace /your-photo.jpg with your actual image in /public */}
-            <img
-              src={Cdu}
-              alt="Ernest Cabarrubias"
-              className="w-full h-full object-cover"
-              onError={() => setImgError(true)}
-              style={{ display: imgError ? "none" : "block" }}
-            />
-
-            {/* Fallback initials */}
-            {imgError && (
-              <div className="w-full h-full flex flex-col items-center justify-center bg-card gap-1">
-                <span className="font-display text-5xl font-extrabold text-gradient-primary">
-                  EC
-                </span>
-                <span className="text-[9px] text-muted-foreground tracking-widest uppercase font-body">
-                  add your photo
-                </span>
+        <div style={s.right} ref={imgRef}>
+          <div style={s.imgFrame}>
+            <div style={s.cornerTL} />
+            <div style={s.cornerBR} />
+            <div style={s.imgInner}>
+              {!imgError ? (
+                <img
+                  src={Cdu}
+                  alt="Ernest Cabarrubias"
+                  onError={() => setImgError(true)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    filter: "grayscale(20%)",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "#111",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'Bebas Neue'",
+                      fontSize: 64,
+                      color: "rgba(200,255,0,0.4)",
+                    }}
+                  >
+                    EC
+                  </span>
+                </div>
+              )}
+              <div style={s.imgOverlay} />
+            </div>
+            <div style={s.imgBadge}>
+              <div
+                style={{
+                  ...s.badgeMono,
+                  color: "rgba(200,255,0,0.7)",
+                  marginBottom: 2,
+                }}
+              >
+                Bohol, PH
               </div>
-            )}
-
-            {/* Subtle overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(135deg, hsl(15 85% 60% / 0.07) 0%, transparent 60%)",
-              }}
-            />
+              <div style={{ ...s.badgeMono, color: "rgba(255,255,255,0.25)" }}>
+                Available for work
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Floating badge — student */}
-          
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.4 }}
-      >
-        <span className="text-[10px] text-muted-foreground/40 tracking-[0.4em] uppercase font-body">
-          Scroll
-        </span>
-        <motion.div
-          className="w-px h-10 bg-gradient-to-b from-primary/40 to-transparent"
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ transformOrigin: "top" }}
+      {/* Scroll hint */}
+      <div style={s.scrollHint}>
+        <span style={s.scrollMono}>Scroll</span>
+        <div
+          style={{
+            width: 1,
+            height: 40,
+            background:
+              "linear-gradient(to bottom, rgba(200,255,0,0.5), transparent)",
+            animation: "scrollPulse 2s ease-in-out infinite",
+          }}
         />
-      </motion.div>
+      </div>
+
+      <style>{`
+        @keyframes scrollPulse {
+          0%,100%{transform:scaleY(0.4);transform-origin:top;opacity:0.4}
+          50%{transform:scaleY(1);opacity:1}
+        }
+      `}</style>
     </section>
   );
 };
