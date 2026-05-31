@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "./components/ui/sonner.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import { TooltipProvider } from "./components/ui/tooltip.tsx";
+import { Analytics } from "@vercel/analytics/next"
 import Start from "./pages/Start.tsx";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -15,6 +16,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+      <Analytics />
         <Routes>
           <Route path="/" element={<Start />} />
           <Route path="/portfolio" element={<Index />} />
