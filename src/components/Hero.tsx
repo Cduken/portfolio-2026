@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Cdu from "../assets/gallery/cdu.jpg";
+import Cdu from "../assets/gallery/grad2.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
